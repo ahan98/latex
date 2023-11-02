@@ -1,6 +1,7 @@
 import re
 import sys
 import os
+import subprocess
 from enum import Enum
 
 
@@ -36,7 +37,7 @@ if lines[i] == "---\n":
 
 preamble += [
     "\\documentclass[12pt]{exam}\n",
-    "\\input{preamble.tex}\n",
+    "\\input{/Users/alex/git/latex/preamble.tex}\n",
     "\\usepackage{xcolor}\n",
     "\\definecolor{blush}{rgb}{0.87, 0.36, 0.51}\n",
     "\\definecolor{brightmaroon}{rgb}{0.76, 0.13, 0.28}\n",
@@ -113,7 +114,7 @@ if has_refs:
     postamble = [
         "\\newpage\n",
         "\\bibliographystyle{plain}\n",
-        "\\bibliography{ref}\n",
+        "\\bibliography{/Users/alex/git/latex/ref}\n",
     ] + postamble
 
 dir_name = os.path.dirname(markdown)
@@ -125,4 +126,4 @@ new_lines = preamble + new_lines + postamble
 file.writelines(new_lines)
 file.close()
 
-os.system(f"tectonic {tex} --outfmt pdf")
+subprocess.run(["tectonic", tex, "--outfmt", "pdf"])
