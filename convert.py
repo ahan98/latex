@@ -69,6 +69,20 @@ def get_cite_key(s):
     return "\\cite{" + match.group(1) + "}" if match else None
 
 
+def wrap_markdown(text):
+    # Pattern to find bold phrases
+    bold_pattern = re.compile(r'\*\*(.*?)\*\*')
+    # Pattern to find italic phrases
+    italic_pattern = re.compile(r'\*(.*?)\*')
+
+    # Replace bold phrases with \textbf{...}
+    text = bold_pattern.sub(r'\\textbf{\1}', text)
+    # Replace italic phrases with \textit{...}
+    text = italic_pattern.sub(r'\\textit{\1}', text)
+
+    return text
+
+
 has_refs = False
 new_lines = []
 while i < len(lines):
@@ -101,11 +115,11 @@ while i < len(lines):
     else:
         # new_lines.append(line)
         for j, token in enumerate(tokens):
-            cite_key = get_cite_key(token)
-            if cite_key:
+            if cite_key := get_cite_key(token):
                 has_refs = True
                 tokens[j] = cite_key
-        line = " ".join(tokens)
+
+        line = wrap_markdown(" ".join(tokens))
         new_lines.append(line + "\n")
     i += 1
 
